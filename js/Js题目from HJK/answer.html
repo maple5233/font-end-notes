@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>答案</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <style type="text/css">
+        textarea
+        {
+            word-break: break-all;
+            resize: none;
+        }
+        .problem
+        {
+            background-color: #D9D8DC;
+            margin-bottom: 30px;
+            padding: 15px;
+            width: 50%;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body id="wholePage">
+    <div class="problem" class="form-group" >
+        <h4 class="text-center">题目一：计算两个日期的天数差</h4>
+        <form>
+            <p>输入：</p>
+            <input type="text" v-model="Date1" placeholder="Date1,年月日用半角逗号隔开" class="form-control" @input="handle1" >
+            <input type="text" v-model="Date2" placeholder="Date2,年月日用半角逗号隔开" class="form-control" @input="handle1" >
+            <p>结果：</p>
+            <textarea  spellcheck="false"  type="text"  v-model="answer1" class="form-control" v-model="" rows="5" ></textarea>
+        </form>
+    </div>
+    <div class="problem" class="form-group" >
+        <h4 class="text-center">题目二：计算两个日期的天数差 - 高级版</h4>
+        <form>
+            <p>输入：</p>
+            <input type="text" @input="handle2" v-model="Date3" placeholder="Date1,年月日用-隔开" class="form-control">
+            <input type="text" @input="handle2"  v-model="Date4" placeholder="Date2,年月日用-隔开" class="form-control">
+            <p>结果：</p>
+            <textarea  spellcheck="false"  type="text"  class="form-control" v-model="answer2" rows="5" ></textarea>
+        </form>
+    </div>
+    <div class="problem" class="form-group" >
+        <h4 class="text-center">题目三：计算数组中元素重复次数</h4>
+        <form>
+            <p>输入：</p>
+            <input type="text" @input="handle3" v-model="arrToCount" placeholder="输入一个仅包含数字的数组" class="form-control">
+            <p>结果：</p>
+            <textarea  spellcheck="false"  type="text"  class="form-control" v-model="answer3" rows="5" ></textarea>
+        </form>
+    </div>
+    <div class="problem" class="form-group" >
+        <h4 class="text-center">题目四：驼峰转换函数</h4>
+        <form>
+            <p>输入：</p>
+            <input type="text" @input="handle4" v-model="nameToFomart" placeholder="要转换的字符串" class="form-control">
+            <p>结果：</p>
+            <textarea  spellcheck="false"  type="text" v-model="answer4" class="form-control" rows="5" ></textarea>
+        </form>
+    </div>
+    <div class="problem" class="form-group" >
+        <h4 class="text-center">题目五：寻找字符串中第一个未重复的字符</h4>
+        <form>
+            <p>输入：</p>
+            <input type="text" @input="handle5" v-model="strToFindSingleDog"  placeholder="要寻找的字符串" class="form-control">
+            <p>结果：</p>
+            <textarea  spellcheck="false"  type="text"  class="form-control" v-model="answer5" rows="5" ></textarea>
+        </form>
+    </div>
+    <div class="problem" class="form-group" >
+        <h4 class="text-center">题目六：展平数组</h4>
+        <p>由于很难将输入的字符串转化成嵌套数组（需要递归）这里只展示代码</p>
+        <pre class="pre-scrollable">
+            var <var>flatten</var> = function (arr) {
+                    return arr.reduce((plane, toBeFlatten) => (plane.concat(Array.isArray(toBeFlatten) ? flatten(toBeFlatten) : toBeFlatten)), []);
+            }
+        </pre>
+    </div>
+    <script src="http://cdn.bootcss.com/vue/1.0.28/vue.min.js"></script>
+    <script type="text/javascript">
+        var vm = new Vue ({
+            el: '#wholePage',
+            data: {
+                Date1 : '',
+                Date2 : '',
+                Date3 : '',
+                Date4 : '',
+                arrToCount : '',
+                nameToFomart : '',
+                strToFindSingleDog : '',
+                arrToDimensionalityReductionHit : '',
+                answer1 : '',
+                answer2 : '',
+                answer3 : '',
+                answer4 : '',
+                answer5 : '',
+                answer6 : ''
+            },
+            methods : {
+                handle1 : function () {
+                    /* 预处理 */
+                    let dateReg = /\d{4},(\d{2}|\d{1}),(\d{2}|\d{1})/;
+                    let isDateString = dateReg.test(this.Date1)&&dateReg.test(this.Date2);
+                    if (!isDateString) {return;}
+                    let Date1 = new Date(this.Date1);
+                    let Date2 = new Date(this.Date2);
+                    /* 调用核心代码 */
+                    let str = this.daySpan(Date1,Date2);
+                    /* 输出结果 */
+                    this.answer1 = '隔着' + str + '天';
+                },
+                handle2 : function () {
+                    /* 预处理 */
+                    let dateReg = /\d{4}-(\d{2}|\d{1})-(\d{2}|\d{1})/;
+                    let isDateString = dateReg.test(this.Date3)&&dateReg.test(this.Date4);
+                    if (!isDateString) {return;}
+                    let Date1 = new Date(this.Date3);
+                    let Date2 = new Date(this.Date4);
+                    /* 调用核心代码 */
+                    let str = this.daySpan(Date1,Date2);
+                    // console.log(str)
+                    /* 输出结果 */
+                    this.answer2 = '隔着' + str + '天';
+                },
+                daySpan :function (Date1,Date2) {
+                    return Math.abs((Date2.getTime()-Date1.getTime())/1000/24/3600);
+                },
+                handle3 : function () {
+                    /* 预处理 */
+                    let arrToCount = this.arrToCount;
+                    if(arrToCount[0] !== '[' || arrToCount[arrToCount.length-1] !== ']') 
+                        return;
+                    let arr = arrToCount.slice(1,length-1).split(',');
+                    /* 调用核心代码 */
+                    let answer = this.countRepeat(arr);
+                    /* 输出结果 */
+                    this.answer3 = JSON.stringify(answer).replace(/,/g,',\n').replace(/{/,'{\n').replace(/}/,'\n}');
+                },
+                countRepeat :function (arr) {
+                    // 第一种
+                    // let count = {};
+                    // arr.forEach(i=> { count[i] = (count[i]||0)+1; });
+                    // return count;
+                    // 第二种
+                    return arr.reduce((count,val) => ((count[val] = (count[val]||0)+1),count),{});
+                    // (a) => ((code),b) 等于
+                    // fuction(a){
+                    //  code
+                    //  return b;
+                    //  }
+                    //  arr.reduce(回调函数(上一次的返回值，这一次遍历的对象),初始值)
+                },
+                handle4 : function () {
+                    /* 预处理 */
+                    let nameToFomart = this.nameToFomart;
+                    /* 调用核心代码 */
+                    let arr = this.camelCase(nameToFomart);
+                    /* 输出结果 */
+                    this.answer4 = arr;
+                },
+                camelCase :function (str) {
+                    str = str.replace(/\s/g,'-');
+                    str = str.replace(/-+/g,'-');
+                    let strArr = str.split('-');
+                    let head = strArr.shift();
+                    let newArr = [];
+                    strArr.forEach(i => {
+                        let h = i[0].toUpperCase();
+                        newWord = h + i.slice(1,i.length).toLowerCase();
+                        newArr.push(newWord);
+                    });
+                    newArr.unshift(head.toLowerCase());
+                    return newArr.toString().replace(/,/g,'');
+                },
+                handle5 : function () {
+                   /* 预处理 */
+                    let strToFindSingleDog = this.strToFindSingleDog;
+                    /* 调用核心代码 */
+                    let str = this.firstNonRepeat(strToFindSingleDog);
+                    /* 输出结果 */
+                    this.answer5 = str; 
+                },
+                firstNonRepeat : function (str) {
+                    // 方法一
+                    // let arr = str.split('');
+                    // return arr.find(function(element,index){
+                    //     return  (arr.indexOf(element) == index && arr.indexOf(element, index + 1) == -1)
+                    // })|| '';
+                    // 方法一简化为一行
+                    //return str.split('').find((element,index)=>(str.split('').indexOf(element) == index && str.split('').indexOf(element, index + 1) == -1));
+                    // 再简化
+                    return str.split('').find((e,i,a)=>(a.indexOf(e) == i && a.indexOf(e, i + 1) == -1));
+                    // 方法二
+                    // for (var i = 0; i < str.length; i++) {
+                    //     var c = str.charAt(i);
+                    //     if (str.indexOf(c) == i && str.indexOf(c, i + 1) == -1) {
+                    //       return c;
+                    //     }
+                    // }
+                    // return '';
+                    // 方法二简化
+                    // str.forEach(c => {
+                    //     if (str.indexOf(c) == i && str.indexOf(c, i + 1) == -1) {
+                    //       return c;
+                    //     }
+                    // });
+                },
+                handle6 : function () {
+                    /* 预处理 */
+                    let arrToDimensionalityReductionHit = this.arrToDimensionalityReductionHit;
+                    /* 这里需要将字符串转嵌套数组 */
+                    /* 调用核心代码 */
+                    let arr = this.flatten(arrToDimensionalityReductionHit);
+                    /* 输出结果 */
+                    this.answer6 = arr.toString();
+                },
+                flatten :function (arr) {
+                    // return arr.reduce((plane, toBeFlatten) => (plane.concat(Array.isArray(toBeFlatten) ? flatten(toBeFlatten) : toBeFlatten)), []);
+                    return flatten(arr.map(x=>Array.isArray(x)? deepFlatten(x): x));
+                }
+            }
+        })
+    </script>
+</body>
+</html>
