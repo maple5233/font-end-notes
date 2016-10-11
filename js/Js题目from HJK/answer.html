@@ -72,12 +72,12 @@
     </div>
     <div class="problem" class="form-group" >
         <h4 class="text-center">题目六：展平数组</h4>
-        <p>由于很难将输入的字符串转化成嵌套数组（需要递归）这里只展示代码</p>
-        <pre class="pre-scrollable">
-            var <var>flatten</var> = function (arr) {
-                    return arr.reduce((plane, toBeFlatten) => (plane.concat(Array.isArray(toBeFlatten) ? flatten(toBeFlatten) : toBeFlatten)), []);
-            }
-        </pre>
+        <form>
+            <p>输入：</p>
+            <input type="text" @input="handle6" v-model="arrToDimensionalityReductionHit"  placeholder="要降维打击的嵌套数组" class="form-control">
+            <p>结果：</p>
+            <textarea  spellcheck="false"  type="text"  class="form-control" v-model="answer6" rows="5" ></textarea>
+        </form>
     </div>
     <script src="https://cdn.bootcss.com/vue/1.0.28/vue.min.js"></script>
     <script type="text/javascript">
@@ -212,14 +212,15 @@
                     /* 预处理 */
                     let arrToDimensionalityReductionHit = this.arrToDimensionalityReductionHit;
                     /* 这里需要将字符串转嵌套数组 */
+                    arrToDimensionalityReductionHit = JSON.parse(arrToDimensionalityReductionHit);
+                    if (!Array.isArray(arrToDimensionalityReductionHit)) { return; }
                     /* 调用核心代码 */
                     let arr = this.flatten(arrToDimensionalityReductionHit);
                     /* 输出结果 */
-                    this.answer6 = arr.toString();
+                    this.answer6 = '['+arr.toString()+']';
                 },
                 flatten :function (arr) {
-                    // return arr.reduce((plane, toBeFlatten) => (plane.concat(Array.isArray(toBeFlatten) ? flatten(toBeFlatten) : toBeFlatten)), []);
-                    return flatten(arr.map(x=>Array.isArray(x)? deepFlatten(x): x));
+                    return arr.reduce((plane, toBeFlatten) => (plane.concat(Array.isArray(toBeFlatten) ? this.flatten(toBeFlatten) : toBeFlatten)), []);
                 }
             }
         })
