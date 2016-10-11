@@ -131,11 +131,13 @@
                 handle3 : function () {
                     /* 预处理 */
                     let arrToCount = this.arrToCount;
-                    if(arrToCount[0] !== '[' || arrToCount[arrToCount.length-1] !== ']') 
-                        return;
-                    let arr = arrToCount.slice(1,length-1).split(',');
+                    /* 这里需要将字符串转数组 */
+                    arrToCount = JSON.parse(arrToCount);
+                    if (!Array.isArray(arrToCount)) { return; }
+
+                    // let arr = arrToCount.slice(1,length-1).split(',');
                     /* 调用核心代码 */
-                    let answer = this.countRepeat(arr);
+                    let answer = this.countRepeat(arrToCount);
                     /* 输出结果 */
                     this.answer3 = JSON.stringify(answer).replace(/,/g,',\n').replace(/{/,'{\n').replace(/}/,'\n}');
                 },
